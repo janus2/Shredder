@@ -1,4 +1,5 @@
 #include <Application.h>
+#include <Catalog.h>
 #include <stdio.h>
 #include <Alert.h>
 #include <String.h>
@@ -16,6 +17,9 @@
 #include "PStatWindow.h"
 #include "ShredderApp.h"
 #include "constants.h"
+
+#undef B_TRANSLATION_CONTEXT
+#define B_TRANSLATION_CONTEXT "ShredderApp"
 
 ShredderApp::ShredderApp()
 	: BApplication(APP_SIGNATURE)
@@ -61,9 +65,8 @@ void ShredderApp::RefsReceived(BMessage *message)
 	{
 		// ok or not!
 		BAlert *shredAlert;
-		BString alertText;
-		alertText.SetTo("Are you sure you want to continue shredding?");
-		shredAlert = new BAlert("shredalert",alertText.String(), "Yes","Cancel");
+		shredAlert = new BAlert("shredalert",B_TRANSLATE("Are you sure you want to continue shredding?"),
+			B_TRANSLATE("Yes"),B_TRANSLATE("Cancel"));
 		shredAlert->SetShortcut(1, B_ESCAPE);
 		buttonIndex = shredAlert->Go();
 	}	

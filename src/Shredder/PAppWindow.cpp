@@ -27,13 +27,11 @@
 PAppWindow::PAppWindow()
 	: BWindow(BRect(64,64,384,220), B_TRANSLATE("Shredder preferences"), B_TITLED_WINDOW,B_NOT_RESIZABLE|B_NOT_ZOOMABLE|B_NOT_MINIMIZABLE|B_AUTO_UPDATE_SIZE_LIMITS)
 {
-	slider = new BSlider("const:slider1", B_TRANSLATE("Number of iterations"), new BMessage(SLIDER_CHANGE), 0, 24, B_HORIZONTAL);
+	slider = new BSlider("const:slider1", "", new BMessage(SLIDER_CHANGE), 0, 24, B_HORIZONTAL);
+	slider->SetModificationMessage(new BMessage(SLIDER_CHANGE));
 	slider->SetHashMarks(B_HASH_MARKS_BOTTOM); 
 	slider->SetHashMarkCount(25);
 	slider->SetLimitLabels(B_TRANSLATE("0 - OFF"), B_TRANSLATE("24"));
-
-	sliderStatusLabel = new BStringView("sliderstatuslabel", B_TRANSLATE("Number of iterations:"));
-	sliderStatus = new BStringView("sliderstatus", "0");
 
 	savebutton = new BButton("button1", B_TRANSLATE("Save"), new BMessage(BTN_SAVE));
 	cancelbutton = new BButton("button2", B_TRANSLATE("Cancel"), new BMessage(BTN_CANCEL));
@@ -43,13 +41,7 @@ PAppWindow::PAppWindow()
 	BLayoutBuilder::Group<>(this, B_VERTICAL)
 		.SetInsets(B_USE_WINDOW_INSETS)
 		.Add(slider)
-		.AddGroup(B_HORIZONTAL)
-			.AddGlue()
-			.Add(sliderStatusLabel)
-			.Add(sliderStatus)
-			.AddGlue()
-		.End()
-		.AddGroup(B_HORIZONTAL)
+		.AddGroup(B_VERTICAL, B_USE_HALF_ITEM_SPACING)
 			.Add(checkBox)
 			.Add(checkBox2)
 		.End()
@@ -86,14 +78,9 @@ PAppWindow::PAppWindow()
 		else
 			checkBox2->SetValue(true);
 
-
 		// set status label
-		float pos = (atof(iterations))/24;			
-
-		slider->SetPosition(pos);
-		temp = "";
-		temp << (int)(slider->Position() * 24);	
-		sliderStatus->SetText(temp.String());
+		slider->SetValue(atoi(iterations));
+		UpdateNumerOfIterations(slider->Value());
 
 		free(iterations);
 	}
@@ -107,11 +94,10 @@ void PAppWindow::SPrefs(void)
 		BFile	file;
 
 		if (file.SetTo("/boot/home/config/settings/Shredder.conf", B_READ_WRITE | B_CREATE_FILE) == B_OK) {
-	
-			if ((int)(slider->Position() * 24) < 10)
-				tempString << "0" << (int)(slider->Position() * 24);
+			if (slider->Value() < 10)
+				tempString << "0" << slider->Value();
 			else
-				tempString << (int)(slider->Position() * 24);
+				tempString << slider->Value();
 				 
 			if (checkBox->Value() == 1)
 				tempString << "y";
@@ -131,9 +117,7 @@ void PAppWindow::MessageReceived(BMessage *message)
 {
 	switch(message->what) {
 		case SLIDER_CHANGE:
-			char temp2[2];
-			sprintf(temp2, "%d", (int)(slider->Position() * 24));
-			sliderStatus->SetText(temp2);
+			UpdateNumerOfIterations(slider->Value());
 			break;
 		case BTN_SAVE:
 			SPrefs();
@@ -146,6 +130,15 @@ void PAppWindow::MessageReceived(BMessage *message)
 		BWindow::MessageReceived(message);
 		break;
 	}
+}
+
+void PAppWindow::UpdateNumerOfIterations(uint32 iterations)
+{
+	BString stringLabel = B_TRANSLATE("Number of iterations: %iterations%");
+	BString stringIterations;
+	stringIterations << iterations;
+	stringLabel.ReplaceFirst("%iterations%", stringIterations);
+	slider->SetLabel(stringLabel);
 }
 
 bool PAppWindow::QuitRequested()

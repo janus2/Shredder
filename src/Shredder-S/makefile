@@ -7,7 +7,7 @@
 ## Application Specific Settings ---------------------------------------------
 
 # specify the name of the binary
-NAME= Shredder-S
+NAME= Shredder
 
 # specify the type of binary
 #	APP:	Application

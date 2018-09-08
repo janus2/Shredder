@@ -52,10 +52,9 @@ process_refs(entry_ref ref, BMessage* msg, void* reserved)
 
 	
 	if ((confirm != 'n') && (msg->FindRef("refs", 0, &fref) == B_OK)) {
-		// ok or not!
-		BAlert *shredAlert;
-		shredAlert = new BAlert("shredalert",B_TRANSLATE("Are you sure you want to continue shredding?"),
-			B_TRANSLATE("Yes"), B_TRANSLATE("Preferences"), B_TRANSLATE("Cancel"));
+		BAlert *shredAlert = new BAlert(B_TRANSLATE_SYSTEM_NAME("Shredder"),
+			B_TRANSLATE("Are you sure you want to continue shredding?"),
+			B_TRANSLATE("Yes"), B_TRANSLATE("Preferences" B_UTF8_ELLIPSIS), B_TRANSLATE("Cancel"));
 		shredAlert->SetShortcut(2, B_ESCAPE);
 
 		buttonIndex = shredAlert->Go();

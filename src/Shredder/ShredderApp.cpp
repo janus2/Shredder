@@ -63,9 +63,8 @@ void ShredderApp::RefsReceived(BMessage *message)
 
 	if (confirm != 'n')
 	{
-		// ok or not!
-		BAlert *shredAlert;
-		shredAlert = new BAlert("shredalert",B_TRANSLATE("Are you sure you want to continue shredding?"),
+		BAlert *shredAlert = new BAlert(B_TRANSLATE_SYSTEM_NAME("Shredder"),
+			B_TRANSLATE("Are you sure you want to continue shredding?"),
 			B_TRANSLATE("Yes"),B_TRANSLATE("Cancel"));
 		shredAlert->SetShortcut(1, B_ESCAPE);
 		buttonIndex = shredAlert->Go();

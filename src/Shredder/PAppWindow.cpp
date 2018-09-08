@@ -25,20 +25,20 @@
 #define B_TRANSLATION_CONTEXT "PAppWindow"
 
 PAppWindow::PAppWindow()
-	: BWindow(BRect(64,64,384,220), B_TRANSLATE("Shredder Preferences"), B_TITLED_WINDOW,B_NOT_RESIZABLE|B_NOT_ZOOMABLE|B_NOT_MINIMIZABLE|B_AUTO_UPDATE_SIZE_LIMITS)
+	: BWindow(BRect(64,64,384,220), B_TRANSLATE("Shredder preferences"), B_TITLED_WINDOW,B_NOT_RESIZABLE|B_NOT_ZOOMABLE|B_NOT_MINIMIZABLE|B_AUTO_UPDATE_SIZE_LIMITS)
 {
-	slider = new BSlider("const:slider1", B_TRANSLATE("Number of Iterations"), new BMessage(SLIDER_CHANGE), 0, 24, B_HORIZONTAL);
+	slider = new BSlider("const:slider1", B_TRANSLATE("Number of iterations"), new BMessage(SLIDER_CHANGE), 0, 24, B_HORIZONTAL);
 	slider->SetHashMarks(B_HASH_MARKS_BOTTOM); 
 	slider->SetHashMarkCount(25);
 	slider->SetLimitLabels(B_TRANSLATE("0 - OFF"), B_TRANSLATE("24"));
 
-	sliderStatusLabel = new BStringView("sliderstatuslabel", B_TRANSLATE("Number of Iterations:"));
+	sliderStatusLabel = new BStringView("sliderstatuslabel", B_TRANSLATE("Number of iterations:"));
 	sliderStatus = new BStringView("sliderstatus", "0");
 
 	savebutton = new BButton("button1", B_TRANSLATE("Save"), new BMessage(BTN_SAVE));
 	cancelbutton = new BButton("button2", B_TRANSLATE("Cancel"), new BMessage(BTN_CANCEL));
-	checkBox = new BCheckBox("check", B_TRANSLATE("Confirm Shredding"), NULL);
-	checkBox2 = new BCheckBox("check", B_TRANSLATE("Show Status Window"), NULL);
+	checkBox = new BCheckBox("check", B_TRANSLATE("Confirm shredding"), NULL);
+	checkBox2 = new BCheckBox("check", B_TRANSLATE("Show status window"), NULL);
 
 	BLayoutBuilder::Group<>(this, B_VERTICAL)
 		.SetInsets(B_USE_WINDOW_INSETS)
